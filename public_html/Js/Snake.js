@@ -22,7 +22,7 @@ var screenHeight;
 gameInitialize();
 snakeInitialize();
 foodInitialize();
-setInterval(gameLoop, 1000/30);
+setInterval(gameLoop, 50);
 
 
 
@@ -139,11 +139,11 @@ function keyboardHandler(event) {
     else if(event.keyCode == "39" && snakeDirection != "left") {
         snakeDirection = "right";
     }
-    if(event.keyCode == "37" && snakeDirection != " right") {
-        snakeDirection = "left"
+    if(event.keyCode == "37" && snakeDirection != "right") {
+        snakeDirection = "left";
     }
     else if(event.keyCode == "38" && snakeDirection != "down") {
-        snakeDirection = "up"
+        snakeDirection = "up";
     }
 }
 
