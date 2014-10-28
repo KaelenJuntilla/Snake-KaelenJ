@@ -14,6 +14,9 @@ var context;
 var screenWidth;
 var screenHeight;
 
+var gameState;
+var gameOverMenu;
+
 /*-----------------------------------------------------------------------------
  * Executing Game Code
  * ----------------------------------------------------------------------------
@@ -37,13 +40,19 @@ function gameInitialize(){
     canvas.height = screenHeight;
     
     document.addEventListener("keydown", keyboardHandler);
+    
+    gameOverMenu = document.getElementById("gameOver");
+    
+    setState("PLAY");
 }
 
 function gameLoop() {
     gameDraw();
-    snakeUpdate();
-    snakeDraw();
-    foodDraw();
+    if(gameState == "PLAY") {
+        snakeUpdate();
+        snakeDraw();
+        foodDraw();
+    }
 }
 
 function gameDraw() {
@@ -166,9 +175,30 @@ function checkFoodCollisions(snakeHeadX, snakeHeadY) {
 
  function checkWallCollisions(snakeHeadX, snakeHeadY) {
     if(snakeHeadX * snakeSize >= screenWidth || snakeHeadX * snakeSize< 0) {
-        console.log("Wall Collision");
+        setState("GAME OVER"); 
     }
     if(snakeHeadY * snakeSize >= screenHeight || snakeHeadY * snakeSize< 0) {
-        console.log("Wall Collision");
+       setState("GAME OVER");
+    }
+}
+
+/*
+ * ----------------------------------------------------------------------------
+ * Game State Handling
+ * ----------------------------------------------------------------------------
+ */
+
+function setState(state) {
+    gameState = state;
+    showMenu(state);
+}
+
+function displayMenu(menu) {
+    menu.style.visibility = "visible";
+}
+
+function showMenu(state) {
+    if(state == "GAME OVER") {
+        displayMenu(gameOverMenu);  
     }
 }
