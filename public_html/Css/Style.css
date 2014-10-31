@@ -1,8 +1,10 @@
+/* this is where I pad the game screen*/
 body {
     margin: 0;
     padding: 0;
 }
 
+/* this is where I design my Game Screen*/
 #game-screen {
     display: block;
 }
@@ -11,7 +13,7 @@ body {
     position: absolute;
     visibility: hidden;
 }
-
+/*This is where have my font and editited to look the way I want*/
 h1, h2, h3 {
     font-family: 'Gloria Hallelujah', cursive;
     text-align: center;
@@ -34,5 +36,23 @@ h1, h2, h3 {
 
 #scoreboard {
     margin: 0px;
+}
+
+#startScreen{
+    position: absolute;
+    visibility: hidden;
+}
+
+#playbutton{
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+#playbutton:hover {
+    background-color:darkolivegreen;
+}
+
+h2 {
+    padding-left: 640px
 }
 
