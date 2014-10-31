@@ -17,6 +17,8 @@ var screenHeight;
 var gameState;
 var gameOverMenu;
 var restartButton;
+var playHUD;
+var scoreboard;
 
 /*-----------------------------------------------------------------------------
  * Executing Game Code
@@ -48,11 +50,15 @@ function gameInitialize(){
     restartButton = document.getElementById("restartButton");
     restartButton.addEventListener("click", gameRestart);
     
+    playHUD = document.getElementById("playHUD");
+    scoreboard = document.getElementById("scoreboard");
+    
     setState("PLAY");
 }
 
 function gameLoop() {
     gameDraw();
+    drawScoreboard();
     if(gameState == "PLAY") {
         snakeUpdate();
         snakeDraw();
@@ -68,6 +74,7 @@ function gameDraw() {
 function gameRestart() {
     snakeInitialize();
     foodInitialize();
+    hideMenu(gameOverMenu);
     setState("PLAY");
 }
 
@@ -91,7 +98,9 @@ function snakeDraw() {
         context.fillRect(snake[index].x * snakeSize, snake[index].y * snakeSize, snakeSize, snakeSize);
     }
 }
-
+/* this is where I add the code to change the direction for snake to go up,left,
+ * right,down.
+ */
 function snakeUpdate() {
     var snakeHeadX = snake[0].x;
     var snakeHeadY = snake[0].y;
@@ -111,6 +120,7 @@ function snakeUpdate() {
     
     checkFoodCollisions(snakeHeadX, snakeHeadY);
     checkWallCollisions(snakeHeadX, snakeHeadY);
+    checkSnakeCollisions(snakeHeadX, snakeHeadY);
    
     
     var snakeTail = snake.pop();
@@ -124,6 +134,7 @@ function snakeUpdate() {
  * ----------------------------------------------------------------------------
  */
 
+/* the setFoodPostition is how I changed the spot of the food when i eat it*/
 function foodInitialize() {
     food = {
         x: 0,
@@ -150,6 +161,9 @@ function setFoodPosition() {
  * ----------------------------------------------------------------------------
  */
 
+/* here this is where I add the directions for all keys in for my snake also this
+ * is where I add the code so that my snake doesn't go into itself
+ */
 function keyboardHandler(event) {
     console.log(event);
     
@@ -183,6 +197,21 @@ function checkFoodCollisions(snakeHeadX, snakeHeadY) {
         setFoodPosition();
     }
 }
+
+function checkSnakeCollisions(snakeHeadX, snakeHeadY) {
+    for(var index = 1; index < snake.length; index++) {
+        if(snakeHeadX == snake[index].x && snakeHeadY == snake[index].y) {
+            setState("GAME OVER");
+            return;
+        }
+    }
+}
+
+/*
+ * ---------------------------------------------------------------------------
+ * this is where I add the wall collisions for the top and bottom of the screen
+ * ---------------------------------------------------------------------------
+ */
 
  function checkWallCollisions(snakeHeadX, snakeHeadY) {
     if(snakeHeadX * snakeSize >= screenWidth || snakeHeadX * snakeSize< 0) {
@@ -218,13 +247,24 @@ function hideMenu(menu) {
     menu.style.visibility = "hidden";
 }
 
+function hideMenu(menu) {
+    menu.style.visibility = "hidden";
+}
+
 function showMenu(state) {
     if(state == "GAME OVER") {
         displayMenu(gameOverMenu);  
+    }
+    else if(state == "PLAY") {
+        displayMenu(playHUD);
     }
 }
 
 function centerMenuPosition(menu) {
     menu.style.top = (screenHeight / 2) - (menu.offsetHeight / 2) + "px";
     menu.style.left = (screenWidth / 2) - (menu.offsetWidth / 2) + "px";
+}
+
+function drawScoreboard() {
+    scoreboard.innerHTML = "Length: " + snakeLength;
 }
